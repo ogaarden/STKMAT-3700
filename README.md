@@ -1,2 +1,2 @@
 # STKMAT-3700
-Mathmetical finances at UiO
+Mathematical finances at UiO autumn 2023
