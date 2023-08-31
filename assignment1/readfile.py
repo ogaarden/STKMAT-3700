@@ -62,7 +62,7 @@ plt.plot(x, y, linewidth=2, color='r')  # Gaussian curve
 plt.title('Weekly Returns and Fitted Gaussian Curve')
 plt.xlabel('Weekly return')
 plt.ylabel('Density')
-
+plt.savefig("Histogram of returns")
 # Show the plots
 plt.show()
 
