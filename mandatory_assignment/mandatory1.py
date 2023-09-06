@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from utils.readfiles import calculate_returns, readfile, calculate_mean, calculate_volatility
+from utils.toolset import calculate_returns, readfile, calculate_mean, calculate_volatility
 
 
 Path = {
-    "RACE_daily" : "mandatory_assignment\companies\RACE_daily.txt",
-    "RACE_weekly" : "mandatory_assignment\companies\RACE_weekly.txt",
-    "AMZN_daily": "mandatory_assignment\companies\AMZN_daily.txt",
-    "AMZN_weekly": "mandatory_assignment\companies\AMZN_weekly.txt",
+    "RACE_daily" : "mandatory_assignment\stock_data\RACE_daily.txt",
+    "RACE_weekly" : "mandatory_assignment\stock_data\RACE_weekly.txt",
+    "AMZN_daily": "mandatory_assignment\stock_data\AMZN_daily.txt",
+    "AMZN_weekly": "mandatory_assignment\stock_data\AMZN_weekly.txt",
 }
 
 Companies = {
