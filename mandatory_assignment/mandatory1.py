@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from utils.toolset import calculate_returns, readfile, calculate_mean, calculate_volatility, gaussian_curve, plot_time_series
+from utils.toolset import calculate_returns, readfile, calculate_mean, calculate_volatility, gaussian_curve, plot_time_series, plot_histogram
 
 
 Path = {
@@ -51,14 +51,17 @@ for stock in Companies:
 for stock in Companies:
     print(Companies[stock]["volatility"], Companies[stock]["mean"])
 
-plot_time_series(Companies)
 
 
-x = np.linspace(min(Companies["AMZN_weekly"]["returns"]), max(Companies["AMZN_weekly"]["returns"]), 100)
+#plot_time_series(Companies) # Oppgave b
 
-y = gaussian_curve(x, (Companies["AMZN_weekly"]["volatility"]), Companies["AMZN_weekly"]["mean"])
+plot_histogram(Companies)
 
+#x = np.linspace(min(Companies["AMZN_weekly"]["returns"]), max(Companies["AMZN_weekly"]["returns"]), 100)
 
+#y = gaussian_curve(x, (Companies["AMZN_weekly"]["volatility"]), Companies["AMZN_weekly"]["mean"])
+
+"""
 plt.subplot(1, 2, 1)
 plt.hist(Companies["AMZN_weekly"]["returns"], bins=50, density=True, alpha=0.6, color='g')  # Histogram of daily returns
 plt.plot(x, y, linewidth=2, color='r')  # Gaussian curve
@@ -66,3 +69,5 @@ plt.title('Daily Returns and Fitted Gaussian Curve')
 plt.xlabel('Daily Return')
 plt.ylabel('Density')
 plt.savefig("Histogram of returns")
+plt.show()
+"""

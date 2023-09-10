@@ -25,10 +25,15 @@ def calculate_volatility(returns, trading_days):
 def gaussian_curve(x, volatility, mean):
     return (1/(np.sqrt(2*np.pi*volatility**2)))*np.exp(-((x-mean)**2)/(2*volatility**2))
 
-def plot_histogram(Portfolio, x):
-    return None
+def plot_histogram(Portfolio) -> None:
+    for stock in Portfolio:
+        x = np.linspace(min(Portfolio[stock]["returns"]), max(Portfolio[stock]["returns"]), 100)
+        y = gaussian_curve(x, Portfolio[stock]["volatility"], Portfolio[stock]["mean"])
+        plt.hist(Portfolio[stock]["returns"], bins=50, density=True, alpha=0.6, color='g')
+        plt.plot(x, y, linewidth= 2, color = 'r')
+        plt.show()
 
-def plot_time_series(Portfolio):
+def plot_time_series(Portfolio) -> None:
     
     fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(12, 10))
 
