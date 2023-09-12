@@ -57,5 +57,15 @@ def plot_time_series(Portfolio) -> None:
     plt.tight_layout()  # Adjusts the spaces between the plots
     plt.show()
 
+
+def cov_matrix(portfolio, n):
+    selected_keys = list(portfolio.keys())[:n]
+    weekly_returns = [portfolio[stock]["returns"] for stock in selected_keys if "_weekly" in stock]
+    if not weekly_returns:
+        return None
+    returns_matrix_weekly = np.transpose(weekly_returns)
+    cov_matrix_weekly = np.cov(returns_matrix_weekly, rowvar=False)
+    return cov_matrix_weekly
+
 if __name__ == "__main__":
     None
