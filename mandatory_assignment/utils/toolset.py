@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import minimize
 
 def readfile(filename):
     close = []
@@ -24,6 +25,13 @@ def calculate_volatility(returns, trading_days):
 
 def gaussian_curve(x, volatility, mean):
     return (1/(np.sqrt(2*np.pi*volatility**2)))*np.exp(-((x-mean)**2)/(2*volatility**2))
+
+def expected_return(r: list) -> float:
+    s = 0
+    T = len(r)
+    for i in range(T):
+        s += r[i]
+    return s/T
 
 def plot_histogram(Portfolio) -> None:
     for stock in Portfolio:
@@ -59,13 +67,43 @@ def plot_time_series(Portfolio) -> None:
 
 
 def cov_matrix(portfolio, n):
-    selected_keys = list(portfolio.keys())[:n]
+    selected_keys = list(portfolio.keys())[:n*2]
     weekly_returns = [portfolio[stock]["returns"] for stock in selected_keys if "_weekly" in stock]
     if not weekly_returns:
         return None
     returns_matrix_weekly = np.transpose(weekly_returns)
     cov_matrix_weekly = np.cov(returns_matrix_weekly, rowvar=False)
     return cov_matrix_weekly
+
+def objective(w, cov):
+    return np.dot(w, np.dot(cov, w))
+
+def optimize_min_variance(cov):
+    num_assets = len(cov)
+    
+    # Initial guess for weights (equal weights)
+    initial_weights = [1./num_assets for _ in range(num_assets)]
+    
+    # Constraints: sum of weights is 1
+    constraints = ({'type': 'eq', 'fun': lambda weights: np.sum(weights) - 1})
+    
+    # Asset weights are bound between 0 and 1
+    bounds = tuple((0, 1) for asset in range(num_assets))
+    
+    solution = minimize(objective, initial_weights, args=(cov,), method='SLSQP', bounds=bounds, constraints=constraints)
+    
+    return solution.fun, solution.x
+
+def optimized_returns(portfolio, w, n):
+    selected_keys = [key for key in list(portfolio.keys())[:n*2] if "_weekly" in key]
+    total_return = 0
+    # Ensure that the length of weights matches the number of selected assets
+    assert len(w) == len(selected_keys), "Mismatch between number of weights and selected assets"
+    for i, key in enumerate(selected_keys):
+        total_return += expected_return(portfolio[key]["returns"]) * w[i]
+        
+    return total_return
+
 
 if __name__ == "__main__":
     None

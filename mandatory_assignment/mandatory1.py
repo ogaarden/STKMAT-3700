@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import utils.toolset as ut
+from scipy.optimize import minimize
 
 Path = {
     "RACE_daily" : "mandatory_assignment\stock_data\RACE_daily.txt",
@@ -22,6 +23,7 @@ Companies = {
         "returns" : [],
         "mean" : float,
         "volatility" : float,
+        "e_return" : []
     },
     "RACE_weekly" : {
         "close" : [],
@@ -29,6 +31,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "AMZN_daily" : {
         "close" : [],
@@ -36,6 +39,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "AMZN_weekly": {
         "close" : [],
@@ -43,6 +47,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "TSLA_daily": {
         "close" : [],
@@ -50,6 +55,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "TSLA_weekly":{
         "close" : [],
@@ -57,6 +63,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "SNAP_daily": {
         "close" : [],
@@ -64,6 +71,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "SNAP_weekly": {
         "close" : [],
@@ -71,6 +79,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "AAPL_daily": {
         "close" : [],
@@ -78,6 +87,7 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
     "AAPL_weekly": {
         "close" : [],
@@ -85,8 +95,8 @@ Companies = {
         "returns" : [], 
         "mean" : float,
         "volatility" : float,
+        "e_return" : [],
     },
-    
 }
 
 
@@ -95,30 +105,52 @@ for stock in Companies:
     Companies[stock]["returns"] = ut.calculate_returns(Companies[stock]["close"], Companies[stock]["trading_days"])
     Companies[stock]["mean"] = ut.calculate_mean(Companies[stock]["returns"], Companies[stock]["trading_days"])
     Companies[stock]["volatility"] = ut.calculate_volatility(Companies[stock]["returns"], Companies[stock]["trading_days"])
-
+    Companies[stock]["e_return"] = ut.expected_return(Companies[stock]["returns"])
+    #print(ut.expected_return(Companies[stock]["returns"]))
 #for stock in Companies:
     #print(Companies[stock]["volatility"], Companies[stock]["mean"])
 
-for n in range(3,6):
-    print(f' {n}x{n} covariance matrix \n : {ut.cov_matrix(Companies, n*2)}' )
+def print_cov_matrix(n):
+    print(f' {n}x{n} covariance matrix \n : {ut.cov_matrix(Companies, n)}' )
+
+n = 5
+
+cov_matrices = [ut.cov_matrix(Companies, n) for n in range(3, 6)]
+min_variances = []
+optimal_weights_list = []
+
+for cov_matrix in cov_matrices:
+    min_var, opt_weights = ut.optimize_min_variance(cov_matrix)
+    print(opt_weights)
+    min_variances.append(min_var)
+    optimal_weights_list.append(opt_weights)
 
 
+expected_returns = [ut.optimized_returns(Companies, w, len(w)) for w in optimal_weights_list]
 
-#plot_time_series(Companies) # Oppgave b
 
-#plot_histogram(Companies)
+colors = ['red', 'blue', 'green']
+markers = ['o', 's', 'D']  # o: circle, s: square, D: diamond
+labels = ['3 assets', '4 assets', '5 assets']
 
-#x = np.linspace(min(Companies["AMZN_weekly"]["returns"]), max(Companies["AMZN_weekly"]["returns"]), 100)
+for i, (variance, ret) in enumerate(zip(min_variances, expected_returns)):
+    plt.scatter(variance, ret, color=colors[i], marker=markers[i], label=labels[i])
 
-#y = gaussian_curve(x, (Companies["AMZN_weekly"]["volatility"]), Companies["AMZN_weekly"]["mean"])
-
-"""
-plt.subplot(1, 2, 1)
-plt.hist(Companies["AMZN_weekly"]["returns"], bins=50, density=True, alpha=0.6, color='g')  # Histogram of daily returns
-plt.plot(x, y, linewidth=2, color='r')  # Gaussian curve
-plt.title('Daily Returns and Fitted Gaussian Curve')
-plt.xlabel('Daily Return')
-plt.ylabel('Density')
-plt.savefig("Histogram of returns")
+plt.xlabel('Volatility (Min Variance)')
+plt.ylabel('Expected Return')
+plt.title('Expected Return vs. Volatility for Portfolios')
+plt.legend(loc='upper left')
+plt.grid(True)
 plt.show()
-"""
+
+
+#print(optimized_ret)
+#for i in range(3,6):
+#    ut.print_cov_matrix(Companies, i)
+#r_m = range(i,n)xi ri
+
+#ut.plot_time_series(Companies) # Oppgave b
+#ut.plot_histogram(Companies)
+
+
+#stock_returns = [Companies[stock]['e_return'] for stock in list(Companies.keys())[::2]]
