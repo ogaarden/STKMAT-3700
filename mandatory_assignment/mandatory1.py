@@ -132,7 +132,7 @@ expected_returns = [ut.optimized_returns(Companies, w, len(w)) for w in optimal_
 colors = ['red', 'blue', 'green']
 markers = ['o', 's', 'D']  # o: circle, s: square, D: diamond
 labels = ['3 assets', '4 assets', '5 assets']
-
+"""
 for i, (variance, ret) in enumerate(zip(min_variances, expected_returns)):
     plt.scatter(variance, ret, color=colors[i], marker=markers[i], label=labels[i])
 
@@ -142,7 +142,7 @@ plt.title('Expected Return vs. Volatility for Portfolios')
 plt.legend(loc='upper left')
 plt.grid(True)
 plt.show()
-
+"""
 
 #print(optimized_ret)
 #for i in range(3,6):
@@ -150,7 +150,8 @@ plt.show()
 #r_m = range(i,n)xi ri
 
 #ut.plot_time_series(Companies) # Oppgave b
-#ut.plot_histogram(Companies)
+
+ut.plot_histogram(Companies)
 
 
 #stock_returns = [Companies[stock]['e_return'] for stock in list(Companies.keys())[::2]]

@@ -63,7 +63,9 @@ def plot_time_series(Portfolio) -> None:
         axes[1].grid(True)
 
     plt.tight_layout()  # Adjusts the spaces between the plots
+    plt.savefig("Time series")
     plt.show()
+    
 
 
 def cov_matrix(portfolio, n):
