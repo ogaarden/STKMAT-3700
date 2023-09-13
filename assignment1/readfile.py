@@ -1,15 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-path = "meta_data/meta1y_daily.txt"
+path ={
+    "weekly" : "meta_data/meta1y_daily.txt",
+    "daily" : "meta_data/meta2y_weekly.txt",
+}
 
-with open("meta_data/meta2y_weekly.txt", 'r') as file:
+
+with open(path["weekly"], 'r') as file:
     file.readline()
     price_close_w = []
     for line in file:
         price_close_w.append(float(line.split(",")[5]))
 
-with open(path, 'r') as file:
+with open(path["daily], 'r') as file:
     file.readline()
     price_close = []
     for line in file:
@@ -21,7 +25,7 @@ trading_days_w = len(price_close_w)
 # Calculating daily returns, R = R_t+1 - R_t / R_t
 daily_returns = [(price_close[i + 1] - price_close[i]) / price_close[i] for i in range(trading_days - 1)]
 weekly_returns = [(price_close_w[i + 1] - price_close_w[i]) / price_close_w[i] for i in range(trading_days_w - 1)]
-
+              
 # Calculating expected return (mean)
 u = sum(daily_returns) / trading_days
 uw = sum(weekly_returns) / trading_days_w
