@@ -1,15 +1,9 @@
-stock = ["nvidia"]
+import numpy as np
+import matplotlib.pyplot as plt
 
-Companies = {
+delta_e = lambda x, eps: (1/np.pi)*eps/(eps*eps+x*x)
 
-}
+[plt.plot(delta_e(np.linspace(-1,1,500), 0.01*10**i)) for i in range(3)]
+plt.show()
 
-Companies[stock] = {
-        "close": [],
-        "trading_days": int,
-        "returns" : [],
-        "mean" : float,
-        "volatility" : float,
-    } 
 
-print(Companies)

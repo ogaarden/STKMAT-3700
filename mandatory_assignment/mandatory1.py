@@ -107,8 +107,11 @@ for stock in Companies:
     Companies[stock]["volatility"] = ut.calculate_volatility(Companies[stock]["returns"], Companies[stock]["trading_days"])
     Companies[stock]["e_return"] = ut.expected_return(Companies[stock]["returns"])
     #print(ut.expected_return(Companies[stock]["returns"]))
-#for stock in Companies:
-    #print(Companies[stock]["volatility"], Companies[stock]["mean"])
+
+for stock in Companies:
+    print(f'Volatility of {stock}: {Companies[stock]["volatility"]:.5f} \
+            Mean of {stock} : {Companies[stock]["mean"]:.5f}')
+
 
 def print_cov_matrix(n):
     print(f' {n}x{n} covariance matrix \n : {ut.cov_matrix(Companies, n)}' )
@@ -119,6 +122,7 @@ cov_matrices = [ut.cov_matrix(Companies, n) for n in range(3, 6)]
 min_variances = []
 optimal_weights_list = []
 
+
 for cov_matrix in cov_matrices:
     min_var, opt_weights = ut.optimize_min_variance(cov_matrix)
     print(opt_weights)
@@ -127,7 +131,7 @@ for cov_matrix in cov_matrices:
 
 
 expected_returns = [ut.optimized_returns(Companies, w, len(w)) for w in optimal_weights_list]
-
+print(expected_returns)
 
 colors = ['red', 'blue', 'green']
 markers = ['o', 's', 'D']  # o: circle, s: square, D: diamond
@@ -151,7 +155,7 @@ plt.show()
 
 #ut.plot_time_series(Companies) # Oppgave b
 
-ut.plot_histogram(Companies)
+#ut.plot_histogram(Companies)
 
 
 #stock_returns = [Companies[stock]['e_return'] for stock in list(Companies.keys())[::2]]
